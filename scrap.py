@@ -7,6 +7,13 @@ headers = {
     'User-Agent' : 'Mozilla/5.0'
 }
 
-response = requests.get(url, headers = headers)
+soup = BeautifulSoup(requests.get(url, headers = headers).text, "html.parser")
+books = soup.find_all("article", class_ = "product_pod")
 
-print(response.text)
+for book in books:
+    title = book.h3.a["title"]
+    price = book.find("p", class_ = "price_color").get_text(strip = True)
+
+    print(title, price)
+
+
