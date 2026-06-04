@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = "https://books.toscrape.com"
+url = "https://books.toscrape.com/catalogue/page-"
 
 headers = {
     'User-Agent' : 'Mozilla/5.0'
@@ -14,18 +14,27 @@ ratingMap = {
     'Five' : 5
 }
 
-soup = BeautifulSoup(requests.get(url, headers = headers).text, "html.parser")
-books = soup.find_all("article", class_ = "product_pod")
 contents = []
+titles = []
+prices = []
+ratings = []
 
-for book in books:
-    title = book.h3.a["title"]
-    price = book.find("p", class_ = "price_color").get_text(strip = True)
-    classes = book.find("p", class_ = "star-rating")
-    rating = classes['class'][1]
-    ratingNum = ratingMap[rating]
+for i in range(1, 21):
+    soup = BeautifulSoup(requests.get(url + str(i) + ".html", headers = headers).text, "html.parser")
+    books = soup.find_all("article", class_ = "product_pod")
+    
 
-    contents.append({'title' : title, 'price' : price, 'rating' : ratingNum})
+    for book in books:
+        title = book.h3.a["title"]
+        price = book.find("p", class_ = "price_color").get_text(strip = True)
+        classes = book.find("p", class_ = "star-rating")
+        rating = classes['class'][1]
+        ratingNum = ratingMap[rating]
 
-print(contents)
+        contents.append({'title' : title, 'price' : price, 'rating' : ratingNum})
+        titles.append(title)
+        prices.append(price)
+        ratings.append(rating)
 
+    
+print(*contents, sep="\n")
