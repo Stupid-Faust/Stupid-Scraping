@@ -39,10 +39,10 @@ def webSearch(path:str) -> list:
     UPC = table.find('th', string = 'UPC').find_next_sibling("td").get_text(strip=True)
     prodType = table.find('th', string = 'Product Type').find_next_sibling("td").get_text(strip=True)
     priceText = table.find('th', string = 'Price (excl. tax)').find_next_sibling("td").get_text(strip=True)
-    price = float(priceText.replace("Â£", ""))
+    price = float(priceText.replace("£", ""))
 
     taxText = table.find('th', string = 'Tax').find_next_sibling("td").get_text(strip=True)
-    tax = float(taxText.replace("Â£", ""))
+    tax = float(taxText.replace("£", ""))
 
     return Book(title=title, description=description, prodType=prodType, rating=rating, UPC=UPC, price=price, tax=tax)
 
